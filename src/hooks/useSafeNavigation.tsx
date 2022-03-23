@@ -1,10 +1,10 @@
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
-type RootStackParamList = {
+export type RootStackParamList = {
   SignIn: undefined;
   MovieList: undefined;
-  MovieInfo: {movieId: string};
+  MovieDetail: {movieId: string};
 };
 
 type RootStackParam = NativeStackNavigationProp<RootStackParamList>;
