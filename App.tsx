@@ -9,20 +9,17 @@
  */
 
 import React from 'react';
-import {SafeAreaView, StatusBar, useColorScheme} from 'react-native';
 import {Provider as ReduxProvider} from 'react-redux';
 
 import {NavigationContainer} from '@react-navigation/native';
 import store from './src/redux/store';
-const App = () => {
-  const isDarkMode = useColorScheme() === 'dark';
+import {Router} from './src/Router';
 
+const App = () => {
   return (
     <ReduxProvider store={store}>
       <NavigationContainer>
-        <SafeAreaView>
-          <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-        </SafeAreaView>
+        <Router />
       </NavigationContainer>
     </ReduxProvider>
   );
