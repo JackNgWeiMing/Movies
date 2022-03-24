@@ -1,5 +1,12 @@
 import * as React from 'react';
-import {Text, TextInput, StyleSheet, Button, ButtonProps} from 'react-native';
+import {
+  Text,
+  TextInput,
+  StyleSheet,
+  Button,
+  ButtonProps,
+  View,
+} from 'react-native';
 import {authAPI} from '../../apis';
 import {Container} from '../../components';
 import {SafeAreaView} from '../../components/SafeAreaView';
@@ -38,38 +45,45 @@ export function SignInScreen() {
 
   return (
     <SafeAreaView>
-      {/* Username Input */}
-      <Container>
-        <Text>Username</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={onUsernameChange}
-          value={username}
-          placeholder="useless placeholder"
-        />
-      </Container>
-
-      {/* Password Input */}
-      <Container>
-        <Text>Password</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={onPasswordChange}
-          value={password}
-          placeholder="useless placeholder"
-        />
-      </Container>
-
-      {/* Failed Login Message */}
-      {errorMessage ? (
-        <Container style={styles.alertBox}>
-          <Text style={styles.alertText}>{errorMessage}</Text>
+      <View
+        style={[
+          StyleSheet.absoluteFill,
+          {justifyContent: 'center', alignItems: 'center'},
+        ]}>
+        <Container>
+          <Text>Username</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={onUsernameChange}
+            value={username}
+            placeholder="useless placeholder"
+          />
         </Container>
-      ) : null}
 
-      <Container>
-        <Button title="Login" disabled={loading} onPress={onSubmit} />
-      </Container>
+        {/* Password Input */}
+        <Container>
+          <Text>Password</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={onPasswordChange}
+            value={password}
+            placeholder="useless placeholder"
+          />
+        </Container>
+
+        {/* Failed Login Message */}
+        {errorMessage ? (
+          <Container style={styles.alertBox}>
+            <Text style={styles.alertText}>{errorMessage}</Text>
+          </Container>
+        ) : null}
+
+        <Container>
+          <Button title="Login" disabled={loading} onPress={onSubmit} />
+        </Container>
+      </View>
+
+      {/* Username Input */}
     </SafeAreaView>
   );
 }
