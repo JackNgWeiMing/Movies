@@ -14,19 +14,27 @@ import {MovieItem} from './MovieItem';
 
 export function MovieListScreen() {
   const dispatch = useAppDispatch();
-  const {status, isEnded, responses, errorMessage} = useSearchState();
+  const scrollRef =
+    React.useRef<ScrollView>() as React.MutableRefObject<ScrollView>;
+  const {status, isEnded, responses, errorMessage, searchParams} =
+    useSearchState();
 
-  /*
-   * TODO: directly load the movie when the app start
-   */
   React.useEffect(() => {
-    dispatch(searchThunk({title: ''}));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    dispatch(searchThunk({title: ''})); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  React.useEffect(() => {
+    scrollRef.current.scrollTo({
+      y: 0,
+      animated: true,
+    });
+  }, [searchParams.title]);
 
   return (
     <SafeAreaView hideTop>
-      <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+      <ScrollView
+        ref={scrollRef}
+        contentContainerStyle={styles.scrollViewContainer}>
         <View style={styles.movieList}>
           {responses
             .flatMap(res => res.Search)
