@@ -5,6 +5,7 @@ import {MovieDetailScreen} from './screens/MovieDetail/MovieDetailScreen';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import SearchModal from './components/SearchModal';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {CustomDrawerContent} from './components/CustomDrawerContent';
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -20,7 +21,7 @@ export const Router = () => {
           name="MovieList"
           component={() => {
             return (
-              <Drawer.Navigator>
+              <Drawer.Navigator drawerContent={CustomDrawerContent}>
                 <Drawer.Screen
                   name="MovieList"
                   component={MovieListScreen}
