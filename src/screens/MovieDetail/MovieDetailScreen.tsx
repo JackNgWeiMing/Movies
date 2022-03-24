@@ -58,7 +58,7 @@ export function MovieDetailScreen(props: Props) {
   }, [movieId]);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView hideTop>
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>
         <ImageBackground
           resizeMode="contain"
@@ -69,17 +69,17 @@ export function MovieDetailScreen(props: Props) {
           }}
           source={{
             uri: response ? response.Poster : preloadData.poster,
-          }}>
-          <View style={styles.header}>
-            <View style={{flexGrow: 1, flexShrink: 1}}>
-              <Text style={{fontSize: 18}}>
-                {response?.Title || preloadData.title}
-              </Text>
-              <Text style={{fontSize: 16}}>{response?.Year}</Text>
-            </View>
-            <PreviewVideo />
+          }}
+        />
+        <View style={styles.header}>
+          <View style={{flexGrow: 1, flexShrink: 1}}>
+            <Text style={{fontSize: 18}}>
+              {response?.Title || preloadData.title}
+            </Text>
+            <Text style={{fontSize: 16}}>{response?.Year}</Text>
           </View>
-        </ImageBackground>
+          <PreviewVideo />
+        </View>
 
         {response ? (
           <>
@@ -154,10 +154,8 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
   },
   header: {
-    position: 'absolute',
-    bottom: 0,
     paddingHorizontal: 10,
-    paddingVertical: 5,
+    paddingVertical: 20,
     flexDirection: 'row',
     backgroundColor: '#e9e9e9',
   },

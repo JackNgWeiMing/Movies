@@ -30,29 +30,22 @@ export const MovieItem: React.FC<Props> = React.memo(props => {
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={[
-        styles.root,
-        {
-          width: dimension.width / 2.5,
-        },
-      ]}>
+      style={[styles.root, {width: dimension.width / 2.5}]}>
       <Image
         resizeMode="contain"
         defaultSource={require('../../images/image-fallback.png')}
         source={{uri: movie.Poster}}
         style={[styles.movieImage]}
       />
-      <Text>{movie.Title}</Text>
+      <Text style={{fontSize: 18}}>{movie.Title}</Text>
     </TouchableOpacity>
   );
 });
 
 const styles = StyleSheet.create({
   root: {
-    backgroundColor: 'pink',
     alignItems: 'center',
-    paddingHorizontal: 5,
-    paddingVertical: 5,
+    paddingVertical: 10,
     marginTop: 5,
     marginBottom: 10,
   },
