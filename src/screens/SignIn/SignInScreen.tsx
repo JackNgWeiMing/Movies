@@ -1,8 +1,8 @@
 import * as React from 'react';
 import {Text, TextInput, StyleSheet, Button, ButtonProps} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {loginAPI} from '../../apis';
+import {authAPI} from '../../apis';
 import {Container} from '../../components';
+import {SafeAreaView} from '../../components/SafeAreaView';
 import {useSafeNavigation} from '../../hooks/useSafeNavigation';
 
 export function SignInScreen() {
@@ -24,7 +24,8 @@ export function SignInScreen() {
     setLoading(true);
 
     // Calling API
-    loginAPI(username, password)
+    authAPI
+      .login(username, password)
       .then(() => {
         setLoading(false);
         navigation.navigate('MovieList');
@@ -36,7 +37,7 @@ export function SignInScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.root}>
+    <SafeAreaView>
       {/* Username Input */}
       <Container>
         <Text>Username</Text>
