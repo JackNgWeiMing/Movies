@@ -46,6 +46,7 @@ export function MovieListScreen() {
             <Text>No More to Load</Text>
           ) : (
             <TouchableOpacity
+              disabled={status === 'loading'}
               style={styles.button}
               onPress={() => {
                 dispatch(nextPageThunk());
