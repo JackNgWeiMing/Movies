@@ -12,7 +12,7 @@ export const Router = () => {
   return (
     <>
       <Stack.Navigator
-        initialRouteName="MovieList"
+        initialRouteName="SignIn"
         screenOptions={{
           headerShown: false,
         }}>
@@ -25,6 +25,7 @@ export const Router = () => {
                   name="MovieList"
                   component={MovieListScreen}
                   options={{
+                    title: 'Amazing Movies',
                     headerShown: true,
                     headerRight: _props => <SearchModal />,
                   }}
