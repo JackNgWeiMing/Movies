@@ -7,7 +7,7 @@ export const SafeAreaView: React.FC = props => {
     <_SafeAreaView
       // workaround: ios top edge extra padding issue
       // https://github.com/th3rdwave/react-native-safe-area-context/issues/167
-      edges={['bottom', 'left', 'right']}
+      edges={['top', 'bottom', 'left', 'right']}
       style={styles.root}
       {...props}
     />

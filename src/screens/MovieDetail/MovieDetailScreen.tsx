@@ -6,16 +6,16 @@ import {
   useWindowDimensions,
   ScrollView,
   ImageBackground,
-  TouchableOpacity,
   View,
 } from 'react-native';
+import {useIsFocused} from '@react-navigation/native';
 import {GetMovieByIdResponse, omdbAPI} from '../../apis';
 import {RootStackParamList} from '../../hooks/useSafeNavigation';
 import {Container} from '../../components';
-import {PlayIcon} from './components/PlayIcon';
 import {MovieField} from './components/MovieField';
 import {SafeAreaView} from '../../components/SafeAreaView';
-import {useIsFocused} from '@react-navigation/native';
+import {Spinner} from '../../components/Spinner';
+import {PreviewVideo} from './components/PreviewVideo';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'MovieDetail'>;
 export function MovieDetailScreen(props: Props) {
@@ -26,6 +26,7 @@ export function MovieDetailScreen(props: Props) {
   const [response, setResponse] = React.useState<GetMovieByIdResponse | null>(
     null,
   );
+  const [modalVisible, setModalVisible] = React.useState(false);
 
   const isFocused = useIsFocused();
 
@@ -39,6 +40,9 @@ export function MovieDetailScreen(props: Props) {
     }
   }, [isFocused]);
 
+  /**
+   * Fetch movie on movieId update
+   */
   React.useEffect(() => {
     setLoading(true);
     omdbAPI
@@ -73,14 +77,11 @@ export function MovieDetailScreen(props: Props) {
               </Text>
               <Text style={{fontSize: 16}}>{response?.Year}</Text>
             </View>
-
-            <TouchableOpacity style={styles.playIconWrapper}>
-              <PlayIcon />
-            </TouchableOpacity>
+            <PreviewVideo />
           </View>
         </ImageBackground>
 
-        {response && (
+        {response ? (
           <>
             {/* Categories , Run Time , Rating */}
             <View>
@@ -134,13 +135,17 @@ export function MovieDetailScreen(props: Props) {
               <MovieField title="Actors" value={response.Actors} />
             </Container>
           </>
+        ) : (
+          <View style={styles.spinnerWrapper}>
+            <Spinner />
+          </View>
         )}
       </ScrollView>
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   root: {
     ...StyleSheet.absoluteFillObject,
   },
@@ -167,4 +172,9 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   scrollViewContainer: {paddingBottom: 50},
+  spinnerWrapper: {
+    height: 200,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
