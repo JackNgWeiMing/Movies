@@ -26,8 +26,6 @@ export function MovieDetailScreen(props: Props) {
   const [response, setResponse] = React.useState<GetMovieByIdResponse | null>(
     null,
   );
-  const [modalVisible, setModalVisible] = React.useState(false);
-
   const isFocused = useIsFocused();
 
   /**
@@ -136,6 +134,7 @@ export function MovieDetailScreen(props: Props) {
             </Container>
           </>
         ) : (
+          // Show Loading Spinner
           <View style={styles.spinnerWrapper}>
             <Spinner />
           </View>
