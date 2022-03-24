@@ -20,8 +20,13 @@ const SearchModal = () => {
   const [title, setTitle] = useState('');
   const dispatch = useAppDispatch();
   const {errorMessage, status} = useRootState().search;
+
+  /**
+   * Help auto focus input field when modal is shown
+   */
   useEffect(() => {
     if (modalVisible) {
+      setTitle('');
       setTimeout(() => {
         inputRef.current?.focus();
       }, 400);
@@ -32,7 +37,10 @@ const SearchModal = () => {
     try {
       await dispatch(searchThunk({title: title}));
       setModalVisible(false);
-    } catch (error) {}
+    } catch (error) {
+      // skip
+      // error is display from redux state
+    }
   };
 
   return (

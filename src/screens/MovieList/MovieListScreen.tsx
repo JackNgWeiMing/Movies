@@ -1,13 +1,20 @@
 import * as React from 'react';
-import {StyleSheet, View, ScrollView, Button} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  ScrollView,
+  TouchableOpacity,
+  Text,
+} from 'react-native';
 import {SafeAreaView} from '../../components/SafeAreaView';
-import {useAppDispatch, useRootState} from '../../redux';
+import {Spinner} from '../../components/Spinner';
+import {useAppDispatch, useSearchState} from '../../redux';
 import {nextPageThunk, searchThunk} from '../../redux/reducer/searchSlice';
 import {MovieItem} from './MovieItem';
 
 export function MovieListScreen() {
   const dispatch = useAppDispatch();
-  const {search: searchState} = useRootState();
+  const {status, isEnded, responses, errorMessage} = useSearchState();
 
   /*
    * TODO: directly load the movie when the app start
@@ -18,23 +25,35 @@ export function MovieListScreen() {
   }, []);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView hideTop>
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>
         <View style={styles.movieList}>
-          {searchState.responses
+          {responses
             .flatMap(res => res.Search)
             .map(movie => {
               return <MovieItem movie={movie} />;
             })}
         </View>
 
+        {errorMessage ? (
+          <View style={styles.errorWrapper}>
+            <Text>{errorMessage}</Text>
+          </View>
+        ) : null}
+
         <View style={styles.buttonWrapper}>
-          <Button
-            title={'Load More'}
-            onPress={() => {
-              dispatch(nextPageThunk());
-            }}
-          />
+          {isEnded ? (
+            <Text>No More to Load</Text>
+          ) : (
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                dispatch(nextPageThunk());
+              }}>
+              {status === 'loading' && <Spinner />}
+              <Text>Load More</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -54,8 +73,20 @@ const styles = StyleSheet.create({
   },
   buttonWrapper: {
     padding: 10,
+    alignItems: 'center',
+  },
+  button: {
+    flexDirection: 'row',
+    backgroundColor: '#5ec3eb',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   },
   scrollViewContainer: {
     paddingBottom: 20,
+  },
+  errorWrapper: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 400,
   },
 });

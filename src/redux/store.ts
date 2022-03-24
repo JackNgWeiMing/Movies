@@ -23,4 +23,11 @@ export const useRootState = () => {
   return rootState;
 };
 
+export const useSearchState = () => {
+  const searchState = useSelector<RootState, RootState['search']>(
+    state => state.search,
+  );
+  return searchState;
+};
+
 export default store;
