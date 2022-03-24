@@ -6,6 +6,7 @@ import {
   Button,
   ButtonProps,
   View,
+  Dimensions,
 } from 'react-native';
 import {authAPI} from '../../apis';
 import {Container} from '../../components';
@@ -48,7 +49,10 @@ export function SignInScreen() {
       <View
         style={[
           StyleSheet.absoluteFill,
-          {justifyContent: 'center', alignItems: 'center'},
+          {
+            justifyContent: 'center',
+            alignItems: 'center',
+          },
         ]}>
         <Container>
           <Text>Username</Text>
@@ -88,12 +92,16 @@ export function SignInScreen() {
   );
 }
 
+const {width} = Dimensions.get('window');
+
 const styles = StyleSheet.create({
   root: {
     flex: 1,
     justifyContent: 'center',
   },
   input: {
+    width: width * 0.8,
+    paddingHorizontal: 10,
     height: 40,
     borderWidth: 1,
   },
