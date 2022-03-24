@@ -66,6 +66,9 @@ export const searchSlice = createSlice({
  */
 export const searchThunk = (searchParams: Omit<SearchParams, 'pageIndex'>) => {
   return async (dispatch: AppDispatch) => {
+    /**
+     * Reset state
+     */
     dispatch(searchSlice.actions.setIsEndle(false));
     dispatch(searchSlice.actions.setStatus('loading'));
     dispatch(searchSlice.actions.setErrorMessage(''));
@@ -94,6 +97,9 @@ export const searchThunk = (searchParams: Omit<SearchParams, 'pageIndex'>) => {
       return Promise.reject();
     }
 
+    /**
+     * Success case
+     */
     dispatch(
       searchSlice.actions.setSearchParams({
         ...searchParams,
@@ -119,6 +125,9 @@ export const nextPageThunk = () => {
     let response: GetMovieListResponse | null = null;
     const nextPageIndex = searchParams.pageIndex + 1;
 
+    /**
+     * Reset state
+     */
     dispatch(searchSlice.actions.setErrorMessage(''));
     dispatch(searchSlice.actions.setStatus('loading'));
     try {
@@ -145,6 +154,9 @@ export const nextPageThunk = () => {
       return Promise.reject(response.Response);
     }
 
+    /**
+     * Success case
+     */
     dispatch(
       searchSlice.actions.setSearchParams({
         ...searchParams,
