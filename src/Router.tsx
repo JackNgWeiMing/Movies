@@ -4,24 +4,45 @@ import {MovieListScreen} from './screens/MovieList/MovieListScreen';
 import {MovieDetailScreen} from './screens/MovieDetail/MovieDetailScreen';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import SearchModal from './components/SearchModal';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 const Drawer = createDrawerNavigator();
+const Stack = createNativeStackNavigator();
 
 export const Router = () => {
   return (
     <>
-      <Drawer.Navigator
+      <Stack.Navigator
         initialRouteName="MovieList"
         screenOptions={{
           headerShown: false,
         }}>
-        <Drawer.Screen
+        <Stack.Screen
           name="MovieList"
-          component={MovieListScreen}
-          options={{headerShown: true, headerRight: _props => <SearchModal />}}
+          component={() => {
+            return (
+              <Drawer.Navigator>
+                <Drawer.Screen
+                  name="MovieList"
+                  component={MovieListScreen}
+                  options={{
+                    headerShown: true,
+                    headerRight: _props => <SearchModal />,
+                  }}
+                />
+              </Drawer.Navigator>
+            );
+          }}
         />
-        <Drawer.Screen name="SignIn" component={SignInScreen} />
-        <Drawer.Screen name="MovieDetail" component={MovieDetailScreen} />
-      </Drawer.Navigator>
+        <Stack.Screen name="SignIn" component={SignInScreen} />
+
+        <Stack.Screen
+          name="MovieDetail"
+          component={MovieDetailScreen}
+          options={{
+            headerShown: true,
+          }}
+        />
+      </Stack.Navigator>
     </>
   );
 };
