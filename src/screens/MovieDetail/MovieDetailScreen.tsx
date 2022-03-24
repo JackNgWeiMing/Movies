@@ -3,14 +3,18 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {
   Text,
   StyleSheet,
-  Image,
   useWindowDimensions,
   ScrollView,
+  ImageBackground,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {GetMovieByIdResponse, omdbAPI} from '../../apis';
 import {RootStackParamList} from '../../hooks/useSafeNavigation';
 import {Container} from '../../components';
+import {PlayIcon} from './components/PlayIcon';
+import {MovieField} from './components/MovieField';
+import {SafeAreaView} from '../../components/SafeAreaView';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'MovieDetail'>;
 export function MovieDetailScreen(props: Props) {
@@ -37,40 +41,81 @@ export function MovieDetailScreen(props: Props) {
   }, [movieId]);
 
   return (
-    <SafeAreaView style={styles.root}>
-      <ScrollView>
-        <Image
+    <SafeAreaView>
+      <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+        <ImageBackground
           resizeMode="contain"
-          style={{width: width, height: Math.min(height / 2, 400)}}
+          style={{
+            width: width,
+            height: Math.min(height / 2, 400),
+          }}
           source={{
             uri: response ? response.Poster : '',
-          }}
-        />
-        <Container>
-          <Text>{response?.Title}</Text>
-          <Text>{response?.Year}</Text>
-        </Container>
+          }}>
+          <View style={styles.header}>
+            <View style={{flexGrow: 1, flexShrink: 1}}>
+              <Text style={{fontSize: 18}}>{response?.Title}</Text>
+              <Text style={{fontSize: 16}}>{response?.Year}</Text>
+            </View>
+
+            <TouchableOpacity style={styles.playIconWrapper}>
+              <PlayIcon />
+            </TouchableOpacity>
+          </View>
+        </ImageBackground>
+
         {response && (
           <>
+            {/* Categories , Run Time , Rating */}
+            <View>
+              <Container
+                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <Text style={{textTransform: 'capitalize'}}>
+                  {response.Type}
+                </Text>
+                <Text>{response.Runtime}</Text>
+                <Text>{response.imdbRating} </Text>
+              </Container>
+            </View>
+
+            {/* Sypnopsis */}
             <Container>
-              <Text>{response.Type}</Text>
-              <Text>{response.Runtime}</Text>
-              <Text>{response.Rated}</Text>
-              <Text>{response.imdbRating}</Text>
+              <Text style={{lineHeight: 20}}>
+                <Text style={{fontWeight: 'bold'}}>Synopsis {'    '}</Text>
+                {response.Plot}
+              </Text>
             </Container>
-            <Container>
-              <Text>{response.Plot}</Text>
+
+            {/* Statistic */}
+            <Container style={styles.statisticWrapper}>
+              {[
+                {
+                  title: 'Score',
+                  value: response.Metascore,
+                },
+                {
+                  title: 'Reviews',
+                  value: response.imdbVotes,
+                },
+                {
+                  title: 'Popularity',
+                  value: response.imdbVotes,
+                },
+              ].map(item => {
+                return (
+                  <View style={{paddingHorizontal: 10}}>
+                    <Text>{item.title}</Text>
+                    <Text style={{textAlign: 'center'}}>{item.value}</Text>
+                  </View>
+                );
+              })}
             </Container>
+
+            {/* Other Info */}
             <Container>
-              <Text>{response.Metascore}</Text>
-              {/* TODO: missing reviews & popularity */}
-              {/* <Text>{response.Reviews}</Text> */}
-              {/* <Text>{response.Popularit}</Text> */}
-            </Container>
-            <Container>
-              <Text>{response.Director}</Text>
-              <Text>{response.Writer}</Text>
-              <Text>{response.Actors}</Text>
+              <MovieField title="Director" value={response.Director} />
+              <MovieField title="Writer" value={response.Writer} />
+              <MovieField title="Actors" value={response.Actors} />
             </Container>
           </>
         )}
@@ -87,4 +132,23 @@ const styles = StyleSheet.create({
     height: 40,
     borderWidth: 1,
   },
+  header: {
+    position: 'absolute',
+    bottom: 0,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    flexDirection: 'row',
+    backgroundColor: '#e9e9e9',
+  },
+  playIconWrapper: {
+    paddingHorizontal: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  statisticWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 10,
+  },
+  scrollViewContainer: {paddingBottom: 50},
 });
