@@ -20,8 +20,12 @@ export const MovieItem: React.FC<Props> = React.memo(props => {
   const onPress = React.useCallback(() => {
     navigation.navigate('MovieDetail', {
       movieId: movie.imdbID,
+      preloadData: {
+        poster: movie.Poster,
+        title: movie.Title,
+      },
     });
-  }, [movie.imdbID, navigation]);
+  }, [movie.Poster, movie.Title, movie.imdbID, navigation]);
 
   return (
     <TouchableOpacity

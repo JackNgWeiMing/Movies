@@ -15,16 +15,29 @@ import {Container} from '../../components';
 import {PlayIcon} from './components/PlayIcon';
 import {MovieField} from './components/MovieField';
 import {SafeAreaView} from '../../components/SafeAreaView';
+import {useIsFocused} from '@react-navigation/native';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'MovieDetail'>;
 export function MovieDetailScreen(props: Props) {
   const {route} = props;
-  const {movieId} = route.params;
+  const {movieId, preloadData} = route.params;
   const [loading, setLoading] = React.useState(false);
   const {height, width} = useWindowDimensions();
   const [response, setResponse] = React.useState<GetMovieByIdResponse | null>(
     null,
   );
+
+  const isFocused = useIsFocused();
+
+  /**
+   * Clear response data when this screen in unfocus
+   * so that user won't see stale images and info
+   */
+  React.useEffect(() => {
+    if (isFocused) {
+      setResponse(null);
+    }
+  }, [isFocused]);
 
   React.useEffect(() => {
     setLoading(true);
@@ -51,11 +64,13 @@ export function MovieDetailScreen(props: Props) {
             height: Math.min(height / 2, 400),
           }}
           source={{
-            uri: response ? response.Poster : '',
+            uri: response ? response.Poster : preloadData.poster,
           }}>
           <View style={styles.header}>
             <View style={{flexGrow: 1, flexShrink: 1}}>
-              <Text style={{fontSize: 18}}>{response?.Title}</Text>
+              <Text style={{fontSize: 18}}>
+                {response?.Title || preloadData.title}
+              </Text>
               <Text style={{fontSize: 16}}>{response?.Year}</Text>
             </View>
 
