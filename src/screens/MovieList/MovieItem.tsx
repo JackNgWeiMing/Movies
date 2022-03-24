@@ -34,6 +34,7 @@ export const MovieItem: React.FC<Props> = React.memo(props => {
       ]}>
       <Image
         resizeMode="contain"
+        defaultSource={require('../../images/image-fallback.png')}
         source={{uri: movie.Poster}}
         style={[styles.movieImage]}
       />

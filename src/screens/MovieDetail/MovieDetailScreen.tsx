@@ -45,6 +45,7 @@ export function MovieDetailScreen(props: Props) {
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>
         <ImageBackground
           resizeMode="contain"
+          defaultSource={require('../../images/image-fallback.png')}
           style={{
             width: width,
             height: Math.min(height / 2, 400),
