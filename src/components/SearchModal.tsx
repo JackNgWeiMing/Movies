@@ -44,7 +44,7 @@ const SearchModal = () => {
   };
 
   return (
-    <View style={styles.centeredView}>
+    <>
       <Modal
         animationType="slide"
         transparent={true}
@@ -96,7 +96,7 @@ const SearchModal = () => {
         onPress={() => setModalVisible(true)}>
         <SearchIcon />
       </TouchableOpacity>
-    </View>
+    </>
   );
 };
 

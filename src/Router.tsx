@@ -6,6 +6,8 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import SearchModal from './components/SearchModal';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {CustomDrawerContent} from './components/CustomDrawerContent';
+import {View} from 'react-native';
+import UserLogoIcon from './components/UserLogoIcon';
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -28,7 +30,7 @@ export const Router = () => {
                   options={{
                     title: 'Amazing Movies',
                     headerShown: true,
-                    headerRight: _props => <SearchModal />,
+                    headerRight: HeaderIcons,
                   }}
                 />
               </Drawer.Navigator>
@@ -48,3 +50,12 @@ export const Router = () => {
     </>
   );
 };
+
+const HeaderIcons = (_props: any) => (
+  <View style={{flexDirection: 'row'}}>
+    <View style={{justifyContent: 'center', alignItems: 'center'}}>
+      <UserLogoIcon />
+    </View>
+    <SearchModal />
+  </View>
+);
