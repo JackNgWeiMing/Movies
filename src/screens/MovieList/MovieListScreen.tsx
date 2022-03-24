@@ -3,6 +3,7 @@ import {StyleSheet, View, ScrollView, Button} from 'react-native';
 import {SafeAreaView} from '../../components/SafeAreaView';
 import {useAppDispatch, useRootState} from '../../redux';
 import {nextPageThunk, searchThunk} from '../../redux/reducer/searchSlice';
+import SearchModal from './SearchModal';
 import {MovieItem} from './MovieItem';
 
 export function MovieListScreen() {
@@ -20,6 +21,10 @@ export function MovieListScreen() {
   return (
     <SafeAreaView>
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+        <View>
+          <SearchModal />
+        </View>
+
         <View style={styles.movieList}>
           {searchState.responses
             .flatMap(res => res.Search)

@@ -20,11 +20,20 @@ export interface Movie {
  */
 type ResultType = 'movie' | 'series' | 'episode';
 
-export interface GetMovieListResponse {
+export interface GetMovieListSuccessResponse {
   Response: 'True';
   Search: Movie[];
   totalResults: number;
 }
+
+export interface GetMovieListFailResponse {
+  Response: 'False';
+  Error: 'string';
+}
+
+export type GetMovieListResponse =
+  | GetMovieListSuccessResponse
+  | GetMovieListFailResponse;
 
 const getMovieList = (data: {
   keyword: string;

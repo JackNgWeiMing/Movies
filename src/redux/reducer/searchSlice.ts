@@ -1,5 +1,9 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {GetMovieListResponse, omdbAPI} from '../../apis';
+import {
+  GetMovieListResponse,
+  GetMovieListSuccessResponse,
+  omdbAPI,
+} from '../../apis';
 import {AppDispatch, RootState} from '../store';
 
 type Status = 'idle' | 'loading' | 'failed';
@@ -11,11 +15,13 @@ interface SearchParams {
 interface SearchState {
   searchParams: SearchParams;
   status: Status;
+  errorMessage: string;
   isEnded: boolean;
-  responses: GetMovieListResponse[];
+  responses: GetMovieListSuccessResponse[];
 }
 
 const initialState: SearchState = {
+  errorMessage: '',
   searchParams: {title: '', pageIndex: 1},
   status: 'idle',
   responses: [],
@@ -35,13 +41,19 @@ export const searchSlice = createSlice({
     setIsEndle(state, action: PayloadAction<boolean>) {
       state.isEnded = action.payload;
     },
+    // setErrorMessage(state, action: PayloadAction<boolean>) {
+    //   state.isEnded = action.payload;
+    // },
+    setErrorMessage(state, action: PayloadAction<string>) {
+      state.errorMessage = action.payload;
+    },
     setSearchParams(state, action: PayloadAction<SearchParams>) {
       state.searchParams = action.payload;
     },
-    setResponses(state, action: PayloadAction<GetMovieListResponse[]>) {
+    setResponses(state, action: PayloadAction<GetMovieListSuccessResponse[]>) {
       state.responses = action.payload;
     },
-    addNewResponse(state, action: PayloadAction<GetMovieListResponse>) {
+    addNewResponse(state, action: PayloadAction<GetMovieListSuccessResponse>) {
       state.responses.push(action.payload);
     },
   },
@@ -56,6 +68,7 @@ export const searchThunk = (searchParams: Omit<SearchParams, 'pageIndex'>) => {
   return async (dispatch: AppDispatch) => {
     dispatch(searchSlice.actions.setIsEndle(false));
     dispatch(searchSlice.actions.setStatus('loading'));
+    dispatch(searchSlice.actions.setErrorMessage(''));
     let response: GetMovieListResponse | null = null;
 
     try {
@@ -64,8 +77,21 @@ export const searchThunk = (searchParams: Omit<SearchParams, 'pageIndex'>) => {
         pageIndex: 1,
       });
     } catch (error) {
+      /**
+       * Error Case
+       */
       dispatch(searchSlice.actions.setStatus('failed'));
-      return;
+      dispatch(searchSlice.actions.setErrorMessage('Error Detected'));
+      return Promise.reject();
+    }
+
+    if (response.Response === 'False') {
+      /**
+       * Error Case
+       */
+      dispatch(searchSlice.actions.setStatus('failed'));
+      dispatch(searchSlice.actions.setErrorMessage(response.Error));
+      return Promise.reject();
     }
 
     dispatch(
@@ -75,7 +101,12 @@ export const searchThunk = (searchParams: Omit<SearchParams, 'pageIndex'>) => {
       }),
     );
     dispatch(searchSlice.actions.setStatus('idle'));
-    dispatch(searchSlice.actions.setResponses([response]));
+
+    if (response.Search.length === 0) {
+      dispatch(searchSlice.actions.setIsEndle(true));
+    } else {
+      dispatch(searchSlice.actions.setResponses([response]));
+    }
   };
 };
 
@@ -88,6 +119,7 @@ export const nextPageThunk = () => {
     let response: GetMovieListResponse | null = null;
     const nextPageIndex = searchParams.pageIndex + 1;
 
+    dispatch(searchSlice.actions.setErrorMessage(''));
     dispatch(searchSlice.actions.setStatus('loading'));
     try {
       response = await omdbAPI.getMovieList({
@@ -95,8 +127,22 @@ export const nextPageThunk = () => {
         pageIndex: nextPageIndex,
       });
     } catch (error) {
+      /**
+       * Error Case
+       */
       dispatch(searchSlice.actions.setStatus('failed'));
-      return;
+      let message = 'Error Detected, Try again later';
+      dispatch(searchSlice.actions.setErrorMessage(message));
+      return Promise.reject(message);
+    }
+
+    if (response.Response === 'False') {
+      /**
+       * Error handling
+       */
+      dispatch(searchSlice.actions.setStatus('failed'));
+      dispatch(searchSlice.actions.setErrorMessage(response.Response));
+      return Promise.reject(response.Response);
     }
 
     dispatch(
@@ -106,6 +152,7 @@ export const nextPageThunk = () => {
       }),
     );
     dispatch(searchSlice.actions.setStatus('idle'));
+
     if (response.Search.length === 0) {
       dispatch(searchSlice.actions.setIsEndle(true));
     } else {
