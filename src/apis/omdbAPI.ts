@@ -20,7 +20,7 @@ export interface Movie {
  */
 type ResultType = 'movie' | 'series' | 'episode';
 
-export interface GetMovieListAPIResponse {
+export interface GetMovieListResponse {
   Response: 'True';
   Search: Movie[];
   totalResults: number;
@@ -32,15 +32,14 @@ const getMovieList = (data: {
   pageIndex?: number;
   pageSize?: number;
 }) => {
-  const {
-    keyword,
-    // resultType = 'movie' ,
-    // pageIndex = 1
-  } = data;
+  const {keyword, pageIndex = 1} = data;
 
   return axios
-    .get<GetMovieListAPIResponse>('https://www.omdbapi.com', {
-      params: {s: keyword || 'Marvel'},
+    .get<GetMovieListResponse>('https://www.omdbapi.com', {
+      params: {
+        s: keyword || 'Marvel',
+        page: pageIndex,
+      },
     })
     .then(response => {
       return response.data;
