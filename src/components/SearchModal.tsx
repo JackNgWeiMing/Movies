@@ -8,9 +8,11 @@ import {
   TextInput,
   Dimensions,
 } from 'react-native';
-import {Spinner} from '../../components/Spinner';
-import {useAppDispatch, useRootState} from '../../redux';
-import {searchThunk} from '../../redux/reducer/searchSlice';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {Spinner} from '../components/Spinner';
+import {useAppDispatch, useRootState} from '../redux';
+import {searchThunk} from '../redux/reducer/searchSlice';
+import {SearchIcon} from './SearchIcon';
 
 const SearchModal = () => {
   const inputRef = useRef<TextInput>();
@@ -20,7 +22,6 @@ const SearchModal = () => {
   const {errorMessage, status} = useRootState().search;
   useEffect(() => {
     if (modalVisible) {
-      // Keyboard.
       setTimeout(() => {
         inputRef.current?.focus();
       }, 400);
@@ -31,9 +32,7 @@ const SearchModal = () => {
     try {
       await dispatch(searchThunk({title: title}));
       setModalVisible(false);
-    } catch (error) {
-      // Failed case , print the error message
-    }
+    } catch (error) {}
   };
 
   return (
@@ -47,6 +46,9 @@ const SearchModal = () => {
         }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
+            <Text style={{marginBottom: 5, textAlign: 'left', width: '100%'}}>
+              Search by Movie Title:
+            </Text>
             <TextInput
               ref={inputRef as any}
               placeholder="Enter a movie title"
@@ -57,21 +59,35 @@ const SearchModal = () => {
             {errorMessage ? (
               <Text style={styles.errorMessage}>{errorMessage}</Text>
             ) : null}
-            <Pressable
-              disabled={status === 'loading'}
-              style={[styles.button, styles.buttonClose]}
-              onPress={onSubmit}>
-              {status === 'loading' && <Spinner color="white" />}
-              <Text style={styles.textStyle}>Search</Text>
-            </Pressable>
+            <View style={{flexDirection: 'row'}}>
+              <Pressable
+                disabled={status === 'loading'}
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => {
+                  setModalVisible(false);
+                }}>
+                <Text style={styles.textStyle}>Close</Text>
+              </Pressable>
+              <Pressable
+                disabled={status === 'loading'}
+                style={[styles.button, styles.buttonOpen]}
+                onPress={onSubmit}>
+                {status === 'loading' && (
+                  <View style={{marginRight: 5}}>
+                    <Spinner color="white" />
+                  </View>
+                )}
+                <Text style={styles.textStyle}>Search</Text>
+              </Pressable>
+            </View>
           </View>
         </View>
       </Modal>
-      <Pressable
-        style={[styles.button, styles.buttonOpen]}
+      <TouchableOpacity
+        style={{padding: 5}}
         onPress={() => setModalVisible(true)}>
-        <Text style={styles.textStyle}>Show Modal</Text>
-      </Pressable>
+        <SearchIcon />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -82,14 +98,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
   },
   modalView: {
     width: width * 0.8,
     margin: 20,
     backgroundColor: 'white',
     borderRadius: 5,
-    // padding: 15,
     paddingVertical: 20,
     paddingHorizontal: 15,
     alignItems: 'center',
@@ -103,15 +117,17 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   button: {
+    flexDirection: 'row',
     borderRadius: 5,
     padding: 10,
     elevation: 2,
+    marginRight: 10,
   },
   buttonOpen: {
     backgroundColor: '#F194FF',
   },
   buttonClose: {
-    backgroundColor: '#2196F3',
+    backgroundColor: 'pink',
   },
   textStyle: {
     color: 'white',
@@ -126,7 +142,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 50,
     borderWidth: 1,
-    marginBottom: 5,
+    marginBottom: 10,
   },
   errorMessage: {paddingVertical: 10, color: 'red'},
 });

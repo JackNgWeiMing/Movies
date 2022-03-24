@@ -14,6 +14,7 @@ import {Provider as ReduxProvider} from 'react-redux';
 import {NavigationContainer} from '@react-navigation/native';
 import store from './src/redux/store';
 import {Router} from './src/Router';
+import 'react-native-gesture-handler'; // Required for drawer setup : https://reactnavigation.org/docs/drawer-navigator/
 
 const App = () => {
   return (
