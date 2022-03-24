@@ -61,7 +61,7 @@ export interface GetMovieByIdResponse {
   Poster: string;
   Production: string;
   Rated: string;
-  Ratings: string;
+  Ratings: {Source: string; Value: string}[];
   Released: string;
   Response: string;
   Runtime: string;
