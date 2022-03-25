@@ -16,6 +16,7 @@ import {MovieField} from './components/MovieField';
 import {SafeAreaView} from '../../components/SafeAreaView';
 import {Spinner} from '../../components/Spinner';
 import {PreviewVideo} from './components/PreviewVideo';
+import StarIcon from '../../components/StarIcon';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'MovieDetail'>;
 export function MovieDetailScreen(props: Props) {
@@ -88,8 +89,16 @@ export function MovieDetailScreen(props: Props) {
                 <Text style={{textTransform: 'capitalize'}}>
                   {response.Type}
                 </Text>
-                <Text>{response.Runtime}</Text>
-                <Text>{response.imdbRating} </Text>
+                <Text>{covertToHour(response.Runtime)}</Text>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <StarIcon />
+                  <Text>{response.imdbRating} </Text>
+                </View>
               </Container>
             </View>
 
@@ -175,3 +184,28 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+/**
+ * Convert mins string into hour + mins formats
+ * @param runTime
+ * @returns
+ */
+function covertToHour(runTime: string) {
+  const matches = runTime.match(/([0-9]+) min/i);
+  if (!matches) {
+    return runTime;
+  }
+
+  if (matches) {
+    const num = matches[1];
+    const num_parsed = parseInt(num, 10);
+    if (isNaN(num_parsed)) {
+      return runTime;
+    }
+
+    const hour = Math.floor(num_parsed / 60);
+    const mins = num_parsed % 60;
+
+    return `${hour ? hour + 'h ' : ''}${mins} mins`;
+  }
+}
