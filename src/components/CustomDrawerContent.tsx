@@ -1,6 +1,6 @@
 import {DrawerContentComponentProps} from '@react-navigation/drawer';
 import React from 'react';
-import {Button, Dimensions, StyleSheet, Text, View} from 'react-native';
+import {Button, Dimensions, StyleSheet, View} from 'react-native';
 import {useSafeNavigation} from '../hooks/useSafeNavigation';
 import {SafeAreaView} from './SafeAreaView';
 
@@ -11,7 +11,6 @@ export const CustomDrawerContent: React.FC<
   return (
     <SafeAreaView>
       <View style={styles.root}>
-        <Text>Hello</Text>
         <LogoutButton />
       </View>
     </SafeAreaView>
