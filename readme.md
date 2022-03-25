@@ -1,4 +1,4 @@
-## Screnshot
+## Screenshots
 
 <div style="display:flex; flex-wrap:wrap;">
 <div style="text-align:center"> 
