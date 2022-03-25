@@ -80,7 +80,7 @@ export function MovieDetailScreen(props: Props) {
           <PreviewVideo />
         </View>
 
-        {response ? (
+        {loading && response ? (
           <>
             {/* Categories , Run Time , Rating */}
             <View>
