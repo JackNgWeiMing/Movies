@@ -70,6 +70,8 @@ export function MovieDetailScreen(props: Props) {
             uri: response ? response.Poster : preloadData.poster,
           }}
         />
+
+        {/* Title , Yeaer */}
         <View style={styles.header}>
           <View style={{flexGrow: 1, flexShrink: 1}}>
             <Text style={{fontSize: 18}}>
