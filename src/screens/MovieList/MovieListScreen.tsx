@@ -52,7 +52,7 @@ export function MovieListScreen() {
           {responses
             .flatMap(res => res.Search)
             .map(movie => {
-              return <MovieItem movie={movie} />;
+              return <MovieItem key={movie.imdbID} movie={movie} />;
             })}
         </View>
 
