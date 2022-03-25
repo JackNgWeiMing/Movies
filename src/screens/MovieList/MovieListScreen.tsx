@@ -19,16 +19,29 @@ export function MovieListScreen() {
   const {status, isEnded, responses, errorMessage, searchParams} =
     useSearchState();
 
+  /**
+   * Onmount load initial data
+   */
   React.useEffect(() => {
     dispatch(searchThunk({title: ''})); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /**
+   * When change search titel , auto scroll to top
+   */
   React.useEffect(() => {
     scrollRef.current.scrollTo({
       y: 0,
       animated: true,
     });
   }, [searchParams.title]);
+
+  /**
+   * Load next page using existing keyword
+   */
+  const loadNextPage = () => {
+    dispatch(nextPageThunk());
+  };
 
   return (
     <SafeAreaView hideTop>
@@ -56,9 +69,7 @@ export function MovieListScreen() {
             <TouchableOpacity
               disabled={status === 'loading'}
               style={styles.button}
-              onPress={() => {
-                dispatch(nextPageThunk());
-              }}>
+              onPress={loadNextPage}>
               {status === 'loading' && <Spinner />}
               <Text>Load More</Text>
             </TouchableOpacity>
