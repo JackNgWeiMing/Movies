@@ -21,11 +21,11 @@ interface SearchState {
 }
 
 const initialState: SearchState = {
-  errorMessage: '',
-  searchParams: {title: '', pageIndex: 1},
-  status: 'idle',
-  responses: [],
-  isEnded: false,
+  errorMessage: '', // error message to be displayed
+  searchParams: {title: '', pageIndex: 1}, // used for search
+  status: 'idle', // search request status
+  responses: [], // all the success response , used for pagination
+  isEnded: false, // is the result list reach the end ?
 };
 
 /**
@@ -41,9 +41,6 @@ export const searchSlice = createSlice({
     setIsEndle(state, action: PayloadAction<boolean>) {
       state.isEnded = action.payload;
     },
-    // setErrorMessage(state, action: PayloadAction<boolean>) {
-    //   state.isEnded = action.payload;
-    // },
     setErrorMessage(state, action: PayloadAction<string>) {
       state.errorMessage = action.payload;
     },
@@ -108,6 +105,9 @@ export const searchThunk = (searchParams: Omit<SearchParams, 'pageIndex'>) => {
     );
     dispatch(searchSlice.actions.setStatus('idle'));
 
+    /**
+     * Check if reach last page
+     */
     if (response.Search.length === 0) {
       dispatch(searchSlice.actions.setIsEndle(true));
     } else {
@@ -165,6 +165,9 @@ export const nextPageThunk = () => {
     );
     dispatch(searchSlice.actions.setStatus('idle'));
 
+    /**
+     * Check if reach last page
+     */
     if (response.Search.length === 0) {
       dispatch(searchSlice.actions.setIsEndle(true));
     } else {

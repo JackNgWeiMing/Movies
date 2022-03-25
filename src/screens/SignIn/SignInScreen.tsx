@@ -46,14 +46,7 @@ export function SignInScreen() {
 
   return (
     <SafeAreaView>
-      <View
-        style={[
-          StyleSheet.absoluteFill,
-          {
-            justifyContent: 'center',
-            alignItems: 'center',
-          },
-        ]}>
+      <View style={[StyleSheet.absoluteFill, styles.center]}>
         <Container>
           <Text>Username</Text>
           <TextInput
@@ -98,6 +91,10 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     justifyContent: 'center',
+  },
+  center: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   input: {
     width: width * 0.8,
